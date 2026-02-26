@@ -127,15 +127,21 @@ function initCarousel(totalItems) {
     prevBtn.addEventListener('click', () => {
         if (currentIndex > 0) {
             currentIndex--;
-            updateCarousel();
+        } else {
+            currentIndex = maxIndex;
         }
+        updateCarousel();
+        resetAutoPlay();
     });
 
     nextBtn.addEventListener('click', () => {
         if (currentIndex < maxIndex) {
             currentIndex++;
-            updateCarousel();
+        } else {
+            currentIndex = 0;
         }
+        updateCarousel();
+        resetAutoPlay();
     });
 
     let resizeTimer;
@@ -171,19 +177,53 @@ function initCarousel(totalItems) {
         if (touchStartX - touchEndX > threshold) {
             if (currentIndex < maxIndex) {
                 currentIndex++;
-                updateCarousel();
+            } else {
+                currentIndex = 0; // zapętl na swipe jeśli to koniec
             }
+            updateCarousel();
+            resetAutoPlay();
         }
         if (touchEndX - touchStartX > threshold) {
             if (currentIndex > 0) {
                 currentIndex--;
-                updateCarousel();
+            } else {
+                currentIndex = maxIndex;
             }
+            updateCarousel();
+            resetAutoPlay();
         }
     }
 
+    // AUTO-PLAY
+    let autoPlayInterval;
+    const startAutoPlay = () => {
+        autoPlayInterval = setInterval(() => {
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+            } else {
+                currentIndex = 0; // zapętl na początek
+            }
+            updateCarousel();
+        }, 4000); // przesuwa się co 4 sekundy
+    };
+
+    const stopAutoPlay = () => {
+        clearInterval(autoPlayInterval);
+    };
+
+    const resetAutoPlay = () => {
+        stopAutoPlay();
+        startAutoPlay();
+    };
+
+    // Zatrzymaj jak ktoś najeżdża kursorem, wznow jak zjedzie
+    const carouselWrapper = document.querySelector('.carousel-wrapper');
+    carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
+    carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+
     renderDots();
     updateCarousel();
+    startAutoPlay();
 }
 
 document.addEventListener('DOMContentLoaded', fetchWidgetData);

@@ -199,7 +199,7 @@ function initCarousel(totalItems) {
                 currentIndex = 0; // zapętl na początek
             }
             updateCarousel();
-        }, 4000); // przesuwa się co 4 sekundy
+        }, 10000); // przesuwa się co 4 sekundy
     };
 
     const stopAutoPlay = () => {

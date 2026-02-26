@@ -138,10 +138,27 @@ body {
     max-height: 100%;
     object-fit: contain;
     transition: transform 0.5s ease;
+    animation: imageBreathe 4s ease-in-out infinite;
+}
+
+@keyframes imageBreathe {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .product-card-inner:hover .product-image {
-    transform: scale(1.05);
+    transform: scale(1.1);
+    animation: none;
+    /* Zatrzymaj puls przy oglądaniu przez użytkownika */
 }
 
 .product-brand {
