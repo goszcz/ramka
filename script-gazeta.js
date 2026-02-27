@@ -35,10 +35,8 @@ function renderWidget(data) {
                     <div class="product-image-container">
                         <img src="${photoUrl}" alt="${item.name}" class="product-image" onerror="this.src='https://via.placeholder.com/200?text=Brak+Zdj%C4%99cia'">
                     </div>
-                    <div class="product-brand">${item.partnerName}</div>
-                    <div class="product-name" title="${item.name}">${item.name}</div>
 
-                    <div class="btn-buy">KUP TERAZ &gt;</div>
+                    <div class="btn-buy">SPRAWDŹ CENĘ &gt;</div>
                 </a>
             </div>
         `;
