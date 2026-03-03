@@ -1,22 +1,29 @@
 const API_URL = 'https://api.leadexpert.pl/products/cfqkvujb/';
 
 async function fetchWidgetData() {
+    const apps = document.querySelectorAll('.parallax-widget');
+    if (apps.length === 0) return;
+
     try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error(`HTTP Error! status: ${res.status}`);
         const data = await res.json();
-        renderWidget(data);
+
+        apps.forEach(app => {
+            renderWidget(app, data);
+        });
+
+        initScrollParallax();
     } catch (e) {
         console.error('Failed to load widget data:', e);
-        document.getElementById('widget-app').innerHTML = '<p style="text-align:center; padding: 40px; color: #666;">Nie udało się załadować produktów.</p>';
+        apps.forEach(app => {
+            app.innerHTML = '<p style="text-align:center; padding: 40px; color: #666;">Nie uda&#x0142;o si&#x0119; za&#x0142;adowa&#x0107; produkt&#x00F3;w.</p>';
+        });
     }
 }
 
-function renderWidget(data) {
-    const app = document.getElementById('widget-app');
-
+function renderWidget(app, data) {
     const headerBg = 'logo.png'; // Ładujemy lokalne logo pobrane z załącznika
-
     let cardsHtml = '';
 
     data.items.forEach(item => {
@@ -35,8 +42,6 @@ function renderWidget(data) {
                     <div class="product-image-container">
                         <img src="${photoUrl}" alt="${item.name}" class="product-image" onerror="this.src='https://via.placeholder.com/200?text=Brak+Zdj%C4%99cia'">
                     </div>
-                    <div class="product-brand">${item.partnerName}</div>
-                    <div class="product-name" title="${item.name}">${item.name}</div>
                     <div class="product-price-row">
                         <span class="product-price">${currentPrice}</span>
                         <span class="product-price-old">${oldPrice}</span>
@@ -57,7 +62,7 @@ function renderWidget(data) {
                 </button>
                 
                 <div class="carousel-viewport">
-                    <div class="carousel-track" id="carousel-track">
+                    <div class="carousel-track">
                         ${cardsHtml}
                     </div>
                 </div>
@@ -66,25 +71,26 @@ function renderWidget(data) {
                     <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
                 
-                <div class="pagination" id="carousel-pagination"></div>
+                <div class="pagination"></div>
             </div>
         </div>
     `;
 
     app.innerHTML = widgetHtml;
-    initCarousel(data.items.length);
-    initScrollParallax();
+    initCarousel(app, data.items.length);
 }
 
-function initCarousel(totalItems) {
-    const track = document.getElementById('carousel-track');
-    const prevBtn = document.querySelector('.nav-prev');
-    const nextBtn = document.querySelector('.nav-next');
-    const pagination = document.getElementById('carousel-pagination');
+function initCarousel(app, totalItems) {
+    const track = app.querySelector('.carousel-track');
+    const prevBtn = app.querySelector('.nav-prev');
+    const nextBtn = app.querySelector('.nav-next');
+    const pagination = app.querySelector('.pagination');
 
     let currentIndex = 0;
 
     const getItemsPerView = () => {
+        const layoutLimit = app.getAttribute('data-limit');
+        if (layoutLimit === "1") return 1;
         if (window.innerWidth <= 480) return 1;
         if (window.innerWidth <= 768) return 2;
         return 3;
@@ -163,7 +169,7 @@ function initCarousel(totalItems) {
     let touchStartX = 0;
     let touchEndX = 0;
 
-    const trackContainer = document.querySelector('.carousel-viewport');
+    const trackContainer = app.querySelector('.carousel-viewport');
     trackContainer.addEventListener('touchstart', e => {
         touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
@@ -218,7 +224,7 @@ function initCarousel(totalItems) {
     };
 
     // Zatrzymaj jak ktoś najeżdża kursorem, wznow jak zjedzie
-    const carouselWrapper = document.querySelector('.carousel-wrapper');
+    const carouselWrapper = app.querySelector('.carousel-wrapper');
     carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
     carouselWrapper.addEventListener('mouseleave', startAutoPlay);
 
