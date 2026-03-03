@@ -1,6 +1,6 @@
 :root {
-    --brand-red: #beff96;
-    --brand-red-hover: #a1e27a;
+    --brand-red: #c90022;
+    --brand-red-hover: #a1001b;
     --bg-color: #f7f7f7;
     --text-primary: #111111;
     --text-secondary: #666666;
@@ -9,22 +9,8 @@
     --transition-speed: 0.3s;
 }
 
-* {
+.page-container * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: var(--font-family);
-    background-color: var(--bg-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    color: var(--text-primary);
-    -webkit-font-smoothing: antialiased;
 }
 
 .page-container {
@@ -35,66 +21,37 @@ body {
 
 /* WIDGET WRAPPER */
 .widget-container {
-    background: linear-gradient(135deg, #beff96 0%, #a1e27a 30%, #87cd60 60%, #beff96 100%);
-    background-size: 300% 300%;
-    animation: gradientAmbient 12s ease infinite;
-    border-radius: 8px;
+    background: #fff;
+    border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border-color);
+}
+
+/* HEADER */
+.widget-header {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fff;
     position: relative;
-    padding-top: 10px;
-}
-
-@keyframes gradientAmbient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* LOGO BADGE */
-.widget-logo-badge {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #111;
-    padding: 10px 24px;
+    padding: 10px 20px;
+    height: 60px;
+    /* Maksymalna wysokość nagłówka */
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
-}
-
-.logo-mask {
-    width: 90px;
-    height: 24px;
-    background-color: var(--brand-red);
-    -webkit-mask-image: url('https://static.im-g.pl/i/hp/logo/gazeta.png');
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    mask-image: url('https://static.im-g.pl/i/hp/logo/gazeta.png');
-    mask-size: contain;
-    mask-position: center;
-    mask-repeat: no-repeat;
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* CAROUSEL WRAPPER */
 .carousel-wrapper {
     position: relative;
-    padding: 5px 50px 10px;
+    padding: 30px 50px;
     margin-top: 0;
-    background: transparent;
+    background: #fff;
     z-index: 2;
 }
 
@@ -115,6 +72,7 @@ body {
     padding: 0 12px;
     display: flex;
     flex-direction: column;
+    perspective: 1000px;
 }
 
 @media (max-width: 768px) {
@@ -145,6 +103,7 @@ body {
     transition: transform 0.3s cubic-bezier(0.3, 0, 0.2, 1), box-shadow 0.3s ease;
     text-decoration: none;
     color: inherit;
+    position: relative;
 }
 
 .product-card-inner:hover {
@@ -153,44 +112,65 @@ body {
     border-color: #ddd;
 }
 
+.product-card-inner:hover {
+    border-color: #ddd;
+}
+
 .product-image-container {
     width: 100%;
-    height: 260px;
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 24px;
+    overflow: hidden;
+    /* Wymagane by zdjęcie nie wychodziło na teksty */
+    position: relative;
+    border-radius: 8px;
+    /* Obcięcie krawędzi podczas parallaxu */
 }
 
 .product-image {
     max-width: 100%;
-    max-height: 100%;
+    /* Powiększamy wysokość aby ukryć krawędzie obrazka pozwalając mu na scrollowanie góra/dól */
+    height: 120%;
     object-fit: contain;
-    border-radius: 8px;
-    transition: transform 0.5s ease;
-    animation: imageBreathe 4s ease-in-out infinite;
+    /* Środek zdjęcia na pozycję translateY obliczoną w JS */
+    transform: translateY(var(--parallax-y, 0px));
+    transition: transform 0.1s ease-out;
+    /* Delikatne wygładzanie */
+    will-change: transform;
+    /* Animacja oddychania wyrzucona lub zmodyfikowana - usunięto dla czystszego parallaksu */
 }
 
-@keyframes imageBreathe {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
+/* W wypadku hover, możemy odrobinę powiększyć zdjęcie dla efektu */
 .product-card-inner:hover .product-image {
-    transform: scale(1.1);
-    animation: none;
-    /* Zatrzymaj puls przy oglądaniu przez użytkownika */
+    transform: translateY(var(--parallax-y, 0px)) scale(1.05);
+    /* Powrót do zmiennej + powiększenie */
 }
 
+.product-brand {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #111;
+    margin-bottom: 6px;
+    letter-spacing: 0.8px;
+}
+
+.product-name {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    height: 40px;
+    /* clamp dla 2 linijek */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-bottom: 18px;
+}
 
 .product-price-row {
     margin-top: auto;
@@ -214,9 +194,8 @@ body {
 
 .btn-buy {
     width: 100%;
-    background: linear-gradient(135deg, #beff96 0%, #a1e27a 50%, #87cd60 100%);
-    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 -2px 0 rgba(0, 0, 0, 0.1), 0 4px 10px rgba(161, 226, 122, 0.4);
-    color: #111;
+    background-color: var(--brand-red);
+    color: #fff;
     border: none;
     border-radius: 24px;
     padding: 12px 0;
@@ -224,41 +203,19 @@ body {
     font-weight: 700;
     letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all var(--transition-speed);
+    transition: background-color var(--transition-speed), transform 0.1s;
     text-align: center;
-    position: relative;
-    overflow: hidden;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-.btn-buy::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0) 100%);
-    transform: skewX(-25deg);
-    transition: all 0.5s ease;
-}
-
-.product-card-inner:hover .btn-buy::after {
-    left: 150%;
-    transition: all 0.7s ease;
 }
 
 .product-card-inner:hover .btn-buy {
-    background: linear-gradient(135deg, #a1e27a 0%, #87cd60 50%, #70b44b 100%);
-    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 8px 20px rgba(161, 226, 122, 0.7);
-    transform: translateY(-2px) scale(1.02);
+    background-color: var(--brand-red-hover);
 }
 
 .btn-buy:active {
-    transform: translateY(1px) scale(0.96);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(161, 226, 122, 0.5);
-    transition: all 0.1s;
+    transform: scale(0.97);
 }
+
+/* Removed Z-AXIS PARALLAX PROPS */
 
 /* NAVIGATION BUTTONS */
 .nav-btn {
@@ -331,7 +288,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
 .dot {

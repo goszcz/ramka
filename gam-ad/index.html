@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ad.size" content="width=900,height=300">
+    <title>Inspiracja - Karuzela Produktowa (GAM)</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        var clickTag = "";
+    </script>
+
+    <style>
+        :root {
+            --brand-red: #beff96;
+            --brand-red-hover: #a1e27a;
+            --bg-color: #f7f7f7;
+            --text-primary: #111111;
+            --text-secondary: #666666;
+            --border-color: #eaeaea;
+            --font-family: 'Inter', sans-serif;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #widget-app {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* WIDGET WRAPPER */
+        .widget-container {
+            background: linear-gradient(135deg, #beff96 0%, #a1e27a 30%, #87cd60 60%, #beff96 100%);
+            background-size: 300% 300%;
+            animation: gradientAmbient 12s ease infinite;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            position: relative;
+            padding-top: 10px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        @keyframes gradientAmbient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* LOGO BADGE */
+        .widget-logo-badge {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            padding: 5px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+
+        .logo-mask {
+            width: 70px;
+            height: 18px;
+            background-color: var(--brand-red);
+            -webkit-mask-image: url('https://static.im-g.pl/i/hp/logo/gazeta.png');
+            -webkit-mask-size: contain;
+            -webkit-mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            mask-image: url('https://static.im-g.pl/i/hp/logo/gazeta.png');
+            mask-size: contain;
+            mask-position: center;
+            mask-repeat: no-repeat;
+        }
+
+        /* CAROUSEL WRAPPER */
+        .carousel-wrapper {
+            position: relative;
+            padding: 8px 45px 5px;
+            margin-top: 15px;
+            /* space for badge */
+            background: transparent;
+            z-index: 2;
+            height: calc(100% - 25px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .carousel-viewport {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+        }
+
+        /* PRODUCT CARD */
+        .product-card {
+            flex: 0 0 33.3333%;
+            padding: 0 8px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card-inner {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.015);
+            transition: transform 0.3s cubic-bezier(0.3, 0, 0.2, 1), box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .product-card-inner:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-color: #ddd;
+        }
+
+        .product-image-container {
+            width: 100%;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .product-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 6px;
+            transition: transform 0.5s ease;
+            animation: imageBreathe 4s ease-in-out infinite;
+        }
+
+        @keyframes imageBreathe {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .product-card-inner:hover .product-image {
+            transform: scale(1.1);
+            animation: none;
+        }
+
+        .product-price-row {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #70b44b;
+        }
+
+        .product-price-old {
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .btn-buy {
+            width: 100%;
+            background: linear-gradient(135deg, #beff96 0%, #a1e27a 50%, #87cd60 100%);
+            box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 -2px 0 rgba(0, 0, 0, 0.1), 0 2px 5px rgba(161, 226, 122, 0.4);
+            color: #111;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 0;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-buy::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: all 0.5s ease;
+        }
+
+        .product-card-inner:hover .btn-buy::after {
+            left: 150%;
+            transition: all 0.7s ease;
+        }
+
+        .product-card-inner:hover .btn-buy {
+            background: linear-gradient(135deg, #a1e27a 0%, #87cd60 50%, #70b44b 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-buy:active {
+            transform: translateY(1px);
+            transition: all 0.1s;
+        }
+
+        /* NAVIGATION BUTTONS */
+        .nav-btn {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+            z-index: 10;
+            transition: all 0.2s ease;
+            color: #333;
+        }
+
+        .nav-btn:hover {
+            background: #fafafa;
+            color: #70b44b;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .nav-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .nav-prev {
+            left: 8px;
+        }
+
+        .nav-next {
+            right: 8px;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding-bottom: 5px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot:hover,
+        .dot.active {
+            background-color: #333;
+            transform: scale(1.2);
+        }
+
+        /* RESPONSIVE FOR SMALLER GAM SIZES */
+        @media (max-width: 480px) {
+            .product-card {
+                flex: 0 0 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container">
+        <!-- Renderowanie karuzeli przez JS -->
+        <div id="widget-app"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://api.leadexpert.pl/products/cfqkvujb/';
+
+        async function fetchWidgetData() {
+            try {
+                const res = await fetch(API_URL);
+                if (!res.ok) throw new Error(`HTTP Error! status: ${res.status}`);
+                const data = await res.json();
+                renderWidget(data);
+            } catch (e) {
+                console.error('Failed to load widget data:', e);
+                document.getElementById('widget-app').innerHTML = '<p style="text-align:center; padding: 40px; color: #666;">Nie udało się załadować produktów.</p>';
+            }
+        }
+
+        function renderWidget(data) {
+            const app = document.getElementById('widget-app');
+
+            let cardsHtml = '';
+
+            data.items.forEach(item => {
+                const photoHash = item.photos && item.photos[0] ? item.photos[0] : '';
+                const photoUrl = photoHash ? `https://e-moda24.pl/photos/${photoHash}.jpg` : 'https://via.placeholder.com/200';
+
+                const currentPriceRaw = item.price || 0;
+                const currentPrice = currentPriceRaw.toFixed(2).replace('.', ',') + ' zł';
+
+                const oldPriceRaw = currentPriceRaw * 1.3;
+                const oldPrice = oldPriceRaw.toFixed(2).replace('.', ',') + ' zł';
+
+                // GAM ClickTag Implementation
+                cardsHtml += `
+                    <div class="product-card">
+                        <div onclick="window.open(window.clickTag + '${item.url}', '_blank')" class="product-card-inner">
+                            <div class="product-image-container">
+                                <img src="${photoUrl}" alt="${item.name}" class="product-image" onerror="this.src='https://via.placeholder.com/200?text=Brak+Zdj%C4%99cia'">
+                            </div>
+                            
+                            <div class="product-price-row">
+                                <span class="product-price">${currentPrice}</span>
+                                ${oldPriceRaw > currentPriceRaw ? `<span class="product-price-old">${oldPrice}</span>` : ''}
+                            </div>
+
+                            <div class="btn-buy">SPRAWDŹ CENĘ &gt;</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const widgetHtml = `
+                <div class="widget-container">
+                    <div class="widget-logo-badge">
+                        <div class="logo-mask"></div>
+                    </div>
+                
+                    <div class="carousel-wrapper">
+                        <button class="nav-btn nav-prev" aria-label="Poprzednie">
+                            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        
+                        <div class="carousel-viewport">
+                            <div class="carousel-track" id="carousel-track">
+                                ${cardsHtml}
+                            </div>
+                        </div>
+                        
+                        <button class="nav-btn nav-next" aria-label="Następne">
+                            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                        
+                        <div class="pagination" id="carousel-pagination"></div>
+                    </div>
+                </div>
+            `;
+
+            app.innerHTML = widgetHtml;
+            initCarousel(data.items.length);
+        }
+
+        function initCarousel(totalItems) {
+            const track = document.getElementById('carousel-track');
+            const prevBtn = document.querySelector('.nav-prev');
+            const nextBtn = document.querySelector('.nav-next');
+            const pagination = document.getElementById('carousel-pagination');
+
+            let currentIndex = 0;
+
+            const getItemsPerView = () => {
+                if (window.innerWidth <= 480) return 1;
+                if (window.innerWidth <= 768) return 2;
+                return 3; // Default for 900px width
+            };
+
+            let itemsPerView = getItemsPerView();
+            let maxIndex = Math.max(0, totalItems - itemsPerView);
+
+            // Render Dots
+            const renderDots = () => {
+                pagination.innerHTML = '';
+                const dotsCount = maxIndex + 1;
+                for (let i = 0; i < dotsCount; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = `dot ${i === currentIndex ? 'active' : ''}`;
+                    dot.addEventListener('click', () => {
+                        currentIndex = i;
+                        updateCarousel();
+                    });
+                    pagination.appendChild(dot);
+                }
+            };
+
+            const updateCarousel = () => {
+                if (!track) return;
+                const cardWidth = 100 / itemsPerView;
+                track.style.transform = `translateX(-${currentIndex * cardWidth}%)`;
+
+                const dots = pagination.querySelectorAll('.dot');
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) dot.classList.add('active');
+                    else dot.classList.remove('active');
+                });
+
+                prevBtn.style.opacity = currentIndex === 0 ? '0.3' : '1';
+                prevBtn.style.cursor = currentIndex === 0 ? 'default' : 'pointer';
+
+                nextBtn.style.opacity = currentIndex === maxIndex ? '0.3' : '1';
+                nextBtn.style.cursor = currentIndex === maxIndex ? 'default' : 'pointer';
+            };
+
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                } else {
+                    currentIndex = maxIndex;
+                }
+                updateCarousel();
+                resetAutoPlay();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                } else {
+                    currentIndex = 0;
+                }
+                updateCarousel();
+                resetAutoPlay();
+            });
+
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    const newItemsPerView = getItemsPerView();
+                    if (newItemsPerView !== itemsPerView) {
+                        itemsPerView = newItemsPerView;
+                        maxIndex = Math.max(0, totalItems - itemsPerView);
+                        if (currentIndex > maxIndex) currentIndex = maxIndex;
+                        renderDots();
+                        updateCarousel();
+                    }
+                }, 150);
+            });
+
+            // Touch events for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            const trackContainer = document.querySelector('.carousel-viewport');
+            trackContainer.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            trackContainer.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const threshold = 50;
+                if (touchStartX - touchEndX > threshold) {
+                    if (currentIndex < maxIndex) {
+                        currentIndex++;
+                    } else {
+                        currentIndex = 0;
+                    }
+                    updateCarousel();
+                    resetAutoPlay();
+                }
+                if (touchEndX - touchStartX > threshold) {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                    } else {
+                        currentIndex = maxIndex;
+                    }
+                    updateCarousel();
+                    resetAutoPlay();
+                }
+            }
+
+            // AUTO-PLAY
+            let autoPlayInterval;
+            const startAutoPlay = () => {
+                autoPlayInterval = setInterval(() => {
+                    if (currentIndex < maxIndex) {
+                        currentIndex++;
+                    } else {
+                        currentIndex = 0;
+                    }
+                    updateCarousel();
+                }, 4000);
+            };
+
+            const stopAutoPlay = () => {
+                clearInterval(autoPlayInterval);
+            };
+
+            const resetAutoPlay = () => {
+                stopAutoPlay();
+                startAutoPlay();
+            };
+
+            const carouselWrapper = document.querySelector('.carousel-wrapper');
+            carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
+            carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+
+            renderDots();
+            updateCarousel();
+            startAutoPlay();
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchWidgetData);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspiracja - Karuzela Produktowa Parallax</title>
+    <link rel="stylesheet" href="style-parallax.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Fictional headers and text to allow scroll length -->
+    <div
+        style="max-width: 800px; margin: 40vh auto; padding: 20px; font-family: sans-serif; text-align: center; color: #555;">
+        <h2>Przykładowy artykuł</h2>
+        <p style="line-height: 1.6;">Czytaj dalej, by zobaczyć jak zachowują się karty produktowe podczas przewijania.
+            <br> ↓ Przewiń w dół ↓</p>
+    </div>
+
+    <div class="page-container">
+        <!-- Renderowanie karuzeli przez JS -->
+        <div id="widget-app"></div>
+    </div>
+
+    <div
+        style="max-width: 800px; margin: 50vh auto; padding: 20px; font-family: sans-serif; text-align: center; color: #555;">
+        <h2>Ciąg dalszy artykułu</h2>
+        <p style="line-height: 1.6;">Efekt scroll parallax daje wizualne wrażenie przestrzeni 3D pomiędzy kadrem uciętym
+            przez karty, a ich samym zdjęciowym "wnętrzem". <br> ↑ Przewiń w górę ↑</p>
+    </div>
+
+    <script src="script-parallax.js"></script>
+</body>
+
+</html>
